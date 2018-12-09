@@ -1,15 +1,15 @@
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.GridBagLayout;
-import javax.swing.JToggleButton;
 import java.awt.GridBagConstraints;
-import javax.swing.JLabel;
 import java.awt.Insets;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-public class HotApp implements ItemListener {
+public class HotApp implements ActionListener {
 
 	private JFrame frame;
 	JLabel lblLamp1;
@@ -17,7 +17,7 @@ public class HotApp implements ItemListener {
 	
 	Switch switch1;
 	Lamp lamp1;
-	Lamp lamp2; 
+	Lamp lamp2;
 
 	/**
 	 * Launch the application.
@@ -56,7 +56,7 @@ public class HotApp implements ItemListener {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(200, 200, 700, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
@@ -64,14 +64,31 @@ public class HotApp implements ItemListener {
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
-				
-		JToggleButton tglbtnNewToggleButton = (JToggleButton) switch1.addToContainer(frame.getContentPane(), 0, 1);
-		tglbtnNewToggleButton.addItemListener(this);
-		lblLamp1 = (JLabel) lamp1.addToContainer(frame.getContentPane(), 1, 1);
-		lblLamp2 = (JLabel) lamp2.addToContainer(frame.getContentPane(), 1, 2);		
+
+
+
+
+		JButton b1 = new JButton("Disable Lamp");
+		b1.setMnemonic(KeyEvent.VK_D);
+		b1.setActionCommand("disable");
+
+
+		JButton b3 = new JButton("Enable Lamp");
+		b3.setMnemonic(KeyEvent.VK_E);
+		b3.setActionCommand("enable");
+
+		b1.addActionListener(this);
+		b3.addActionListener(this);
+
+		frame.getContentPane().add(b1);
+		frame.getContentPane().add(b3);
+		//JToggleButton tglbtnNewToggleButton = (JToggleButton) switch1.addToContainer(frame.getContentPane(), 0, 1);
+		//tglbtnNewToggleButton.addItemListener(this);
+		lblLamp1 = (JLabel) lamp1.addToContainer(frame.getContentPane(), 1, 2);
+		lblLamp2 = (JLabel) lamp2.addToContainer(frame.getContentPane(), 0, 2);
 	}
 
-	@Override
+	/*@Override
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getStateChange()==ItemEvent.SELECTED){
 			switch1.turnOn();
@@ -81,6 +98,17 @@ public class HotApp implements ItemListener {
 		
 		lblLamp1.setText(String.valueOf(lamp1.isOn()));
 		lblLamp2.setText(String.valueOf(lamp2.isOn()));
+	}*/
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if ("disable".equals(e.getActionCommand())) {
+			switch1.turnOff();
+		} else {
+			switch1.turnOn();
+		}
+		lblLamp1.setText(String.valueOf(lamp1.isOn()));
+		lblLamp2.setText(String.valueOf(lamp2.isOn()));
+
 	}
 
 }

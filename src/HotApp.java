@@ -14,11 +14,13 @@ public class HotApp implements ActionListener {
 	private JFrame frame;
 	JLabel lblLamp1;
 	JLabel lblLamp2;
+	JLabel lblSensor;
 	
 	Switch switch1;
 	Lamp lamp1;
 	Lamp lamp2;
-
+	Sensor sensor;
+	Heater heater;
 	/**
 	 * Launch the application.
 	 */
@@ -44,10 +46,11 @@ public class HotApp implements ActionListener {
 		lamp2 = new AcmeLamp();
 		switch1 = new AcmeSwitch();
 		//switch1 = new DoeSwitch(); // Incompatible protocols not yet supported
-		
+		heater = new Heater();
+		sensor = new Sensor(20);
 		switch1.attach(lamp1);
 		switch1.attach(lamp2);
-
+		sensor.attach(heater);
 		initialize();
 	}
 
@@ -86,6 +89,7 @@ public class HotApp implements ActionListener {
 		//tglbtnNewToggleButton.addItemListener(this);
 		lblLamp1 = (JLabel) lamp1.addToContainer(frame.getContentPane(), 1, 2);
 		lblLamp2 = (JLabel) lamp2.addToContainer(frame.getContentPane(), 0, 2);
+		lblSensor = (JLabel) sensor.addToContainer(frame.getContentPane(), 3, 3);
 	}
 
 	/*@Override

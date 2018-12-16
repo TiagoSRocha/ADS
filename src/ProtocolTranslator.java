@@ -17,7 +17,7 @@ public class ProtocolTranslator extends Device {
 
 		switch(currentProtocol)
 		{
-			case "ENL":
+			case "ENL"
 				m.invoke(currentProtocol + " DOE");
 				break;
 			case "DOE":

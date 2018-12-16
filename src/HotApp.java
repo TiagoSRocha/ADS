@@ -19,7 +19,7 @@ public class HotApp implements ActionListener {
 	Switch switch1;
 	Lamp lamp1;
 	Lamp lamp2;
-	Sensor sensor;
+	tempSensor sensor;
 	Heater heater;
 	/**
 	 * Launch the application.
@@ -47,7 +47,7 @@ public class HotApp implements ActionListener {
 		switch1 = new AcmeSwitch();
 		//switch1 = new DoeSwitch(); // Incompatible protocols not yet supported
 		heater = new Heater();
-		sensor = new Sensor(20);
+		sensor = new tempSensor(20);
 		switch1.attach(lamp1);
 		switch1.attach(lamp2);
 		sensor.attach(heater);

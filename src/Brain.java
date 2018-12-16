@@ -2,8 +2,10 @@ import java.util.ArrayList;
 
 class Brain implements Runnable{
 
+
      private static Brain obj;
-     ArrayList<Device> notificationsPool = new ArrayList<Device>();
+    tempSensor sensorTemp;
+
      private Brain() {}
 
      // Only one thread can execute this at a time
@@ -17,6 +19,7 @@ class Brain implements Runnable{
      }
      public void run() {
          //ir a pool das notificacoes e lidar.
+
 
      }
 

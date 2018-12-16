@@ -4,7 +4,7 @@ public class Hot {
 		System.out.println("Hello House of Things!");
 		
 		Lamp lamp1 = new AcmeLamp();
-		Switch switch1 = new AcmeSwitch();
+		AcmeSwitch switch1 = new AcmeSwitch();
 		//Switch switch1 = new DoeSwitch(); // Incompatible protocols not yet supported
 
 		System.out.println(String.valueOf(lamp1.isOn()));
@@ -19,7 +19,7 @@ public class Hot {
 		
 		Lamp lamp2 = new AcmeLamp();
 		lamp2.turnOn();
-		Switch switch2 = new AcmeSwitch();
+		AcmeSwitch switch2 = new AcmeSwitch();
 		//Switch switch2 = new DoeSwitch(); // Incompatible protocols not yet supported
 		switch2.attach(lamp2);
 

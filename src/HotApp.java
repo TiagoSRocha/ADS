@@ -15,7 +15,9 @@ public class HotApp implements ActionListener {
 	JLabel lblLamp1;
 	JLabel lblLamp2;
 	JLabel lblTempSensor;
-	JLabel lblLockSensor;
+	JLabel lblLockSensor, lblLockSensor1, lblLockSensor2;
+	JLabel lblHome;
+	JComboBox combo1;
 	
 	AcmeSwitch acmeswitch;
 	DoeSwitch doeswitch;
@@ -25,8 +27,9 @@ public class HotApp implements ActionListener {
 	Heater heater;
 	ProtocolTranslator protocol;
 	LockSensor locksensor;
-	Lock lock;
+	Lock lock, lock1, lock2;
 	Brain brain;
+
 	/**
 	 * Launch the application.
 	 */
@@ -57,21 +60,23 @@ public class HotApp implements ActionListener {
 		locksensor = new LockSensor(false);
 		heater = new Heater();
 		tempsensor = new TempSensor(20);
-
+		lock1 = new Lock(false);
+		lock2 = new Lock(false);
 		brain.attach(locksensor,tempsensor,doeswitch,acmeswitch);
-		//brain.acmeswitch.attach(lamp1);
+
 
 		brain.tempsensor.attach(heater);
 		brain.locksensor.attach(lock);
-
+		brain.locksensor.attach(lock1);
+		brain.locksensor.attach(lock2);
 
 		protocol = new ProtocolTranslator("DEFAULT");
 		System.out.println(lamp1.getProtocol());
-		brain.doeswitch.attach(lamp1);
 		protocol.interchangeProtocol(doeswitch.getProtocol(), lamp1);
+		protocol.interchangeProtocol(acmeswitch.getProtocol(), lamp2);
 		System.out.println(lamp1.getProtocol());
 		brain.doeswitch.attach(lamp1);
-		brain.doeswitch.attach(lamp2);
+		brain.acmeswitch.attach(lamp2);
 		initialize();
 	}
 
@@ -94,7 +99,6 @@ public class HotApp implements ActionListener {
 
 
 		JButton b2 = new JButton("Lock");
-		//b3.setMnemonic(KeyEvent.VK_E);
 		b2.setActionCommand("lock");
 
 
@@ -110,40 +114,42 @@ public class HotApp implements ActionListener {
 		JButton b4 = new JButton("Set Temperature");
 		b4.setActionCommand("temp");
 
+		JButton b5= new JButton("Home");
+		b5.setActionCommand("home");
+
+
+
+
+
+		 combo1 = new JComboBox(
+				new String[]{"Lock 1", "Lock 2", "Lock 3"});
+
 		b1.addActionListener(this);
 		b3.addActionListener(this);
 		b2.addActionListener(this);
 		b4.addActionListener(this);
+		b5.addActionListener(this);
+
 
 
 
 		frame.getContentPane().add(b1);
 		frame.getContentPane().add(b3);
-		frame.getContentPane().add(b2);
 		frame.getContentPane().add(b4);
-		//JToggleButton tglbtnNewToggleButton = (JToggleButton) switch1.addToContainer(frame.getContentPane(), 0, 1);
-		//tglbtnNewToggleButton.addItemListener(this);
-		lblLamp1 = (JLabel) lamp1.addToContainer(frame.getContentPane(), 0, 2);
-		lblLamp2 = (JLabel) lamp2.addToContainer(frame.getContentPane(), 1, 2);
-		lblLockSensor = (JLabel) brain.locksensor.addToContainer(frame.getContentPane(),2,2);
-		lblTempSensor = (JLabel) brain.tempsensor.addToContainer(frame.getContentPane(), 0, 3);
+		frame.getContentPane().add(b2);
+		frame.getContentPane().add(combo1);
+		frame.getContentPane().add(b5);
+
+
+		lblLamp1 = (JLabel) lamp1.addToContainer(frame.getContentPane(), 1, 2);
+		lblLamp2 = (JLabel) lamp2.addToContainer(frame.getContentPane(), 0, 2);
+		lblLockSensor = (JLabel) brain.locksensor.addToContainer(frame.getContentPane(),0,3);
+		lblLockSensor1 = (JLabel) brain.locksensor.addToContainer(frame.getContentPane(),1,3);
+		lblLockSensor2 = (JLabel) brain.locksensor.addToContainer(frame.getContentPane(),2,3);
+		lblTempSensor = (JLabel) brain.tempsensor.addToContainer(frame.getContentPane(), 0, 4);
+		lblHome = (JLabel) brain.locksensor.addToContainer(frame.getContentPane(), 2, 4);
 	}
 
-	/*@Override
-	public void itemStateChanged(ItemEvent e) {
-		if(e.getStateChange()==ItemEvent.SELECTED){
-			switch1.turnOn();
-	    } else if(e.getStateChange()==ItemEvent.DESELECTED){
-	    		switch1.turnOff();
-	    }
-		
-		lblLamp1.setText(String.valueOf(lamp1.isOn()));
-		lblLamp2.setText(String.valueOf(lamp2.isOn()));
-	}*/
-
-
-
-	//Lock nao esta a alternar bem. Corrigir.
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -156,6 +162,12 @@ public class HotApp implements ActionListener {
 				else
 					brain.acmeswitch.update(true);
 				break;
+			case "home":
+				if(brain.getAtHome())
+					brain.setAtHome(false);
+				else
+					brain.setAtHome(true);
+				break;
 			case "doe":
 				if(brain.doeswitch.isOn())
 					brain.doeswitch.update(false);
@@ -163,22 +175,64 @@ public class HotApp implements ActionListener {
 					brain.doeswitch.update(true);
 				break;
 			case "lock":
-				if(brain.locksensor.getLock() == false)
-					brain.locksensor.update(true);
+				int i = combo1.getSelectedIndex();
+				if(brain.locksensor.getLock(i) == false)
+					brain.locksensor.update(true, i);
 				else
-					brain.locksensor.update(false);
+					brain.locksensor.update(false,i);
 				break;
 			case "temp":
 				String input = JOptionPane.showInputDialog(null, "Desired Temperature:");
-				float temperature = Float.parseFloat(input);
-				brain.tempsensor.update(temperature);
+				if(input != null)
+				{
+					float temperature = Float.parseFloat(input);
+					brain.tempsensor.update(temperature);
+				}
 				break;
-
 		}
-		lblLamp1.setText(String.valueOf(lamp1.isOn()));
-		lblLamp2.setText(String.valueOf(lamp2.isOn()));
-		lblLockSensor.setText("Current Lock: " + brain.locksensor.getLock());
-		lblTempSensor.setText("Current Temperature: " + tempsensor.getTemperature());
+
+		if(lamp1.isOn())
+			lblLamp1.setText("On");
+		else
+			lblLamp1.setText("Off");
+
+		if(lamp2.isOn())
+			lblLamp2.setText("On");
+		else
+			lblLamp2.setText("Off");
+
+		if(brain.locksensor.getLock(0))
+			lblLockSensor.setText("Lock1: Locked");
+		else
+			lblLockSensor.setText("Lock1: Unlocked");
+
+
+
+		if(brain.locksensor.getLock(1))
+			lblLockSensor1.setText("Lock2: Locked");
+		else
+			lblLockSensor1.setText("Lock2: Unlocked");
+
+
+
+		if(brain.locksensor.getLock(2))
+			lblLockSensor2.setText("Lock3: Locked");
+		else
+			lblLockSensor2.setText("Lock3: Unlocked");
+
+		lblTempSensor.setText("Current Temperature: " + tempsensor.getTemperature() + "ºC");
+
+		if(brain.getAtHome())
+			lblHome.setText("I'm home.");
+		else{
+			lblHome.setText("Nobody's Home. Everything's Locked.");
+			brain.locksensor.update(true, 0);
+			brain.locksensor.update(true, 1);
+			brain.locksensor.update(true, 2);
+			lblLockSensor.setText("Lock1: Locked");
+			lblLockSensor1.setText("Lock2: Locked");
+			lblLockSensor2.setText("Lock3: Locked");
+		}
 
 
 

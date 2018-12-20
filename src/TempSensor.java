@@ -31,14 +31,17 @@ public class TempSensor extends Device {
         device.update(this.isOn());
     }
 
-    /*
-    @Override - nao sei se fara sentido uma funcao destas aqui
-	public void notifyObservers() {
-		for (Device device: devices) {
-			device.update(this.isOn());
-		}
+
+    //overload
+	public void notifyObservers(boolean value, double temp) {
+
+        this.temperature = temp;
+        if(value)
+            this.turnOn();
+        else
+            this.turnOff();
 	}
-     */
+
 
     public void update(double targetTemperature) {
 
@@ -46,14 +49,14 @@ public class TempSensor extends Device {
             {
                 for (Device device: devices) {
                     device.turnOn();
-                    this.temperature = targetTemperature;
+                    notifyObservers(true, targetTemperature);
 
                 }
             }
         } else {
             for (Device device: devices) {
                 device.turnOff();
-                this.temperature = targetTemperature;
+                notifyObservers(false, targetTemperature);
             }
         }
 

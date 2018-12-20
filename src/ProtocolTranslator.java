@@ -6,7 +6,7 @@ public class ProtocolTranslator extends Device {
 		super(toProtocol);
 	}
 
-	//tou a usar reflexion aqui pa usar o metodo do Pai
+
 	public boolean interchangeProtocol(String requiredProtocol, Device D) {
 		String help = D.getProtocol() + "," + requiredProtocol;
 		try {
@@ -15,7 +15,7 @@ public class ProtocolTranslator extends Device {
 			else
 			{
 				method = Device.class.getDeclaredMethod("setProtocol",requiredProtocol.getClass());
-				method.setAccessible(true); //bypasses the private modifier
+				method.setAccessible(true);
 				method.invoke(D, help);
 				return true;
 			}

@@ -14,8 +14,8 @@ public class LockSensor extends Device {
 
             }
 
-    protected boolean getLock(){
-            return this.islocked;
+    protected boolean getLock(int index){
+            return devices.get(index).isOn();
             }
 
 
@@ -29,27 +29,29 @@ public class LockSensor extends Device {
         device.update(this.isOn());
     }
 
-    /*
-    @Override - nao sei se fara sentido uma funcao destas aqui
-	public void notifyObservers() {
-		for (Device device: devices) {
-			device.update(this.isOn());
-		}
+
+    //Overload
+	public void notifyObservers(boolean value) {
+		if(value)
+		    this.turnOn();
+		else
+		    this.turnOff();
 	}
-     */
 
 
-    //ver esta funçao logica de adapar a fechadura
 
-public void update(boolean islocked) {
-      for (Device device: devices) {
+
+
+public void update(boolean islocked, int index) {
+
             if(islocked == true)
-                device.turnOn();
+                devices.get(index).turnOn();
             else
-                device.turnOff();
+                devices.get(index).turnOff();
 
       this.islocked = islocked;
-     }
+      notifyObservers(islocked);
+
 }
 
 
@@ -59,7 +61,7 @@ public JComponent addToContainer(Container container, int x, int y) {
         //String input = JOptionPane.showInputDialog(null, "Desired Temperature:");
         //float temperature = Float.parseFloat(input);
         //update(true);
-        JLabel lblSensor = new JLabel("Current Lock: " + this.getLock());
+        JLabel lblSensor = new JLabel("Locked");
         GridBagConstraints gbc_lblSensor = new GridBagConstraints();
         gbc_lblSensor.insets = new Insets(0, 0, 5, 0);
         gbc_lblSensor.gridx = x;

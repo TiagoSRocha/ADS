@@ -9,10 +9,11 @@ class Brain implements Runnable{
     protected AcmeSwitch acmeswitch;
     protected DoeSwitch doeswitch;
     protected String protocols = "ENL, HEAT, LOCK, DEFAULT, DOE";
-
+    ArrayList<LockSensor> lockSensors = new ArrayList<LockSensor>();
+    protected boolean atHome;
      private Brain() {}
 
-     // Only one thread can execute this at a time
+
      public static synchronized Brain getBrain()
      {
          if (obj==null) {
@@ -22,8 +23,10 @@ class Brain implements Runnable{
          return obj;
      }
      public void run() {
-         //ir a pool das notificacoes e lidar.
      }
+     public boolean getAtHome() { return this.atHome;}
+
+     public void setAtHome(boolean value){this.atHome = value;}
 
     public void attach(LockSensor locksensor, TempSensor tempsensor, DoeSwitch doeSwitch, AcmeSwitch acmeswitch) throws IncompatibleProtocolException {
         if(!protocols.contains(locksensor.getProtocol())) {
@@ -43,5 +46,4 @@ class Brain implements Runnable{
         }else
             this.acmeswitch = acmeswitch;
     }
-
  }

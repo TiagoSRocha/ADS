@@ -8,11 +8,9 @@ public abstract class Device {
 	
 	public void attach(Device device) throws IncompatibleProtocolException {};
 	public void notifyObservers() {};
-	public void update(boolean on) {}; // TODO: turn into a StateSomething class	
-	
+	public void update(boolean on) {};
 	protected void onChange(boolean on) {};
 	protected JComponent addToContainer(Container container, int x, int y) { return null; }
-		
 	protected Device(String protocol) {
 		this.setProtocol(protocol);
 	}

@@ -12,19 +12,28 @@ public class DoeSwitch extends Device {
 		for (Device device: devices) {
 			if(isOn == true){
 				device.turnOn();
-				this.turnOn();
+				notifyObservers(true);
 			}
-
 			else{
 				device.turnOff();
-				this.turnOff();
+				notifyObservers(false);
 			}
 		}
 	}
 
+	//Overload
+	public void notifyObservers(boolean value) {
+		if(value)
+			this.turnOn();
+		else
+			this.turnOff();
+	}
+
+
+
 	@Override
 	public void attach(Device device) throws IncompatibleProtocolException {
-		if(!device.getProtocol().equals(this.getProtocol())) {
+		if(!device.getProtocol().contains(this.getProtocol())) {
 			throw new IncompatibleProtocolException();
 		}
 		devices.add(device);
